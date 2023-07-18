@@ -1,0 +1,20 @@
+name: Conventional Commits
+
+on:
+  pull_request:
+    types:
+      - opened
+jobs:
+  check-commit-message:
+    name: check commit message
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check message against regex
+      uses: gsactions/commit-message-checker@v2
+      with:
+        pattern: '(?:build|docs|refactor|test|fix|perf|chore|feat)(?:\(\w+\))?:\s[a-z]{1,2}.+'
+        error: "The commit message must follow the commit messages guidelines"
+        excludeDescription: 'true'
+        excludeTitle: 'true'
+        checkAllCommitMessages: 'true'
+        accessToken: ${{ secrets.GITHUB_TOKEN }}

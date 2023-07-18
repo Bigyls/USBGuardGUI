@@ -1,0 +1,75 @@
+#!/usr/bin/python3
+import re
+import logging
+import logging.handlers
+import dbus
+import dbus.service
+import dbus.mainloop.glib
+from gi.repository import GLib
+
+# Defined DBus service name, object path, and interface name
+BUS_NAME = 'com.ParoaPe.USBGuardGUI'
+OBJECT_PATH = '/com/ParoaPe/USBGuardGUI'
+INTERFACE_NAME = 'com.ParoaPe.USBGuardGUI'
+
+# DBus service class that inherits from dbus.service.Object
+class USBGuardGUIDBus(dbus.service.Object):
+    def __init__(self):
+        self.bus = dbus.SystemBus()
+        self.bus.request_name(BUS_NAME)
+        bus_name = dbus.service.BusName(BUS_NAME, bus=self.bus)
+        dbus.service.Object.__init__(self, bus_name, OBJECT_PATH)
+
+        # Init logging
+        logging.basicConfig(filename='/var/log/USBGuardGUI.log',
+                            filemode='a',
+                            format='%(asctime)s, %(name)s %(levelname)s %(message)s',
+                            datefmt='%H:%M',
+                            level=logging.DEBUG)
+
+
+
+    @dbus.service.signal(dbus_interface=INTERFACE_NAME)
+    def usbDetectionSignal(self, usb_name):
+        logging.info(f"Signal send to applet for USB named: {usb_name}")
+        pass
+
+    @dbus.service.method(dbus_interface=INTERFACE_NAME)
+    def usbDetected(self):
+        logging.info('usbDetect method called')
+        try:
+            usbguard_object = self.bus.get_object('org.usbguard1', '/org/usbguard1/Devices')
+            usbguard_interface = dbus.Interface(usbguard_object, 'org.usbguard.Devices1')
+            usb_blocked_name = usbguard_interface.listDevices(dbus.String('block'))
+            print(usb_blocked_name)
+            usb_name = str(usb_blocked_name).split('"')[::-1][str(usb_blocked_name).split('"')[::-1].index(' name ') - 1]
+            self.usbDetectionSignal(usb_name)
+        except Exception as error:
+            logging.debug("Error in usbDecteted method: %s" % error)
+
+    @dbus.service.method(dbus_interface=INTERFACE_NAME)
+    def allowUSBGuard(self):
+        logging.info('allowUSBGuard method called')
+        usbguard_object = self.bus.get_object('org.usbguard1', '/org/usbguard1/Devices')
+        usbguard_interface = dbus.Interface(usbguard_object, 'org.usbguard.Devices1')
+        usb_blocked_id = usbguard_interface.listDevices(dbus.String('block'))
+        id = re.findall(r'dbus.UInt32\((\d+)\)', str(usb_blocked_id))[::-1][0]
+        usbguard_interface.applyDevicePolicy(dbus.UInt32(id), dbus.UInt32(0), dbus.Boolean(True))
+
+    @dbus.service.method(dbus_interface=INTERFACE_NAME)
+    def rejectUSBGuard(self):
+        logging.info('rejectUSBGuard method called')
+        usbguard_object = self.bus.get_object('org.usbguard1', '/org/usbguard1/Devices')
+        usbguard_interface = dbus.Interface(usbguard_object, 'org.usbguard.Devices1')
+        usb_blocked_id = usbguard_interface.listDevices(dbus.String('block'))
+        try:
+            id = re.findall(r'dbus.UInt32\((\d+)\)', str(usb_blocked_id))[::-1][0]
+            usbguard_interface.applyDevicePolicy(dbus.UInt32(id), dbus.UInt32(2), dbus.Boolean(True))
+        except Exception as error:
+            logging.debug("Error in rejectUSBGuard method: %s" % error)
+
+if __name__ == '__main__':
+    dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+    a = USBGuardGUIDBus()
+    loop = GLib.MainLoop()
+    loop.run()

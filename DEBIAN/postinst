@@ -1,0 +1,14 @@
+#!/bin/sh
+
+set -e
+
+usbguard generate-policy > /etc/usbguard/rules.conf
+
+deb-systemd-invoke unmask usbguard.service
+deb-systemd-invoke start usbguard.service
+deb-systemd-invoke enable usbguard.service
+
+deb-systemd-invoke enable USBGuardGUIDBus.service
+deb-systemd-invoke start USBGuardGUIDBus.service
+
+exit 0

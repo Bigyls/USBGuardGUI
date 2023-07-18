@@ -1,0 +1,21 @@
+# .github/workflows/release.yml
+name: release-please
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release-please:
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Release with release-please
+        uses: google-github-actions/release-please-action@v3
+        with:
+          token: ${{ secrets.PAT }}
+          release-type: go
+          default-branch: main
