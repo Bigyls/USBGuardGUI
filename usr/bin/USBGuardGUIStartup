@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Name of the application
+APP_NAME="/usr/bin/USBGuardGUIApplet"
+
+# Check if the application process is running
+if pgrep -f "$APP_NAME" >/dev/null; then
+    exit 0
+else
+    /usr/bin/USBGuardGUIApplet
+fi

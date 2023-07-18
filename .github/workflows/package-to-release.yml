@@ -1,0 +1,33 @@
+# .github/workflows/package-to-release.yml
+name: package-to-release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  package-to-release:
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Depends install
+        run: sudo apt-get install -y dpkg-dev
+
+      - name: Copy files (with exclusions)
+        run: rsync -av --exclude=README.md --exclude=doc --exclude=.git --exclude=.github --exclude=CHANGELOG.md . usbguardgui_amd64
+
+      - name: Create .deb
+        run: dpkg-deb --root-owner-group --build -Zxz usbguardgui_amd64
+
+      - name: Upload .deb to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: usbguardgui_amd64.deb
+          overwrite: true
+          asset_name: usbguardgui_${{ github.ref_name }}_amd64.deb
+          tag: ${{ github.ref_name }}

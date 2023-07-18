@@ -1,0 +1,9 @@
+[Unit]
+Description=USBGuardGUI DBus Service
+
+[Service]
+ExecStart=/usr/bin/USBGuardGUIDBus
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
