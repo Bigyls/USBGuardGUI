@@ -1,1 +1,1 @@
-SUBSYSTEM=="usb", ACTION=="add", RUN+="/bin/dbus-send --system --type=method_call --dest=com.ParoaPe.USBGuardGUI /com/ParoaPe/USBGuardGUI com.ParoaPe.USBGuardGUI.usbDetected"
+SUBSYSTEM=="usb", ACTION=="add", RUN+="/bin/dbus-send --system --type=method_call --dest=com.Bigyls.USBGuardGUI /com/Bigyls/USBGuardGUI com.Bigyls.USBGuardGUI.usbDetected"

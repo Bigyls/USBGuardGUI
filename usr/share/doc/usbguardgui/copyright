@@ -1,6 +1,6 @@
 USBGuardGUI
 
-Copyright: 2023 ParoaPe <par0ap3@proton.me>
+Copyright: 2023 Bigyls <par0ap3@proton.me>
 
 2023-06-16
 
@@ -678,4 +678,3 @@ may consider it more useful to permit linking proprietary applications with
 the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 <https://www.gnu.org/licenses/why-not-lgpl.html>.
-

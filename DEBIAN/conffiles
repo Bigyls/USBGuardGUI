@@ -1,2 +1,2 @@
-/etc/dbus-1/system.d/com.ParoaPe.USBGuardGUI.conf
+/etc/dbus-1/system.d/com.Bigyls.USBGuardGUI.conf
 /etc/xdg/autostart/USBGuardGUIApplet.desktop
