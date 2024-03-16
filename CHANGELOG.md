@@ -5,4 +5,4 @@
 
 ### Bug Fixes
 
-* Update workflow ([585debb](https://github.com/ParoaPe/USBGuardGUI/commit/585debb305e5a7187fc50d4d53b4589c24c5f331))
+* Update workflow ([585debb](https://github.com/Bigyls/USBGuardGUI/commit/585debb305e5a7187fc50d4d53b4589c24c5f331))

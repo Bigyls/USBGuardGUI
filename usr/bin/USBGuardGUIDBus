@@ -8,9 +8,9 @@ import dbus.mainloop.glib
 from gi.repository import GLib
 
 # Defined DBus service name, object path, and interface name
-BUS_NAME = 'com.ParoaPe.USBGuardGUI'
-OBJECT_PATH = '/com/ParoaPe/USBGuardGUI'
-INTERFACE_NAME = 'com.ParoaPe.USBGuardGUI'
+BUS_NAME = 'com.Bigyls.USBGuardGUI'
+OBJECT_PATH = '/com/Bigyls/USBGuardGUI'
+INTERFACE_NAME = 'com.Bigyls.USBGuardGUI'
 
 # DBus service class that inherits from dbus.service.Object
 class USBGuardGUIDBus(dbus.service.Object):
