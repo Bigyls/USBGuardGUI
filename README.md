@@ -13,9 +13,18 @@ USBGuardGUI is a graphic overlay of USBGuard which allows to authorize or reject
 
 Installation can be done via `.deb` file.
 
-Go to the [latest release](https://github.com/ParoaPe/USBGuardGUI/releases/latest) for download `.deb` file.
+Go to the [latest release](https://github.com/Bigyls/USBGuardGUI/releases/latest) for download `.deb` file.
 
 Run command (where `DEB_PACKAGE` is the downloaded file):
+
+#### With APT
+
+```shell
+  sudo apt install <DEB_PACKAGE>
+```
+
+#### With DPKG
+
 ```shell
   sudo dpkg -i <DEB_PACKAGE>
 ```

@@ -8,9 +8,9 @@ from gi.repository import GLib, Gtk
 class USBGuardGUIApplet():
     def __init__(self):
         self.bus = dbus.SystemBus()
-        self.bus.add_signal_receiver(self.signalHandler, bus_name='com.ParoaPe.USBGuardGUI')
+        self.bus.add_signal_receiver(self.signalHandler, bus_name='com.Bigyls.USBGuardGUI')
 
-    def signalHandler(self, *args): # Function executed after receiving a signal from com.ParoaPe.USBGuardGUID
+    def signalHandler(self, *args): # Function executed after receiving a signal from com.Bigyls.USBGuardGUID
         win = USBGuardGUIPopup(*args)
         win.connect("destroy", Gtk.main_quit)
         win.show_all()
@@ -47,14 +47,14 @@ class USBGuardGUIPopup(Gtk.Window):
         box.pack_start(fixedYesButton, True, True, 0)
 
     def on_yes_button_clicked(self, button):
-        usbguard_gui_dbus_object = self.bus.get_object('com.ParoaPe.USBGuardGUI', '/com/ParoaPe/USBGuardGUI')
-        usbguard_gui_dbus_interface = dbus.Interface(usbguard_gui_dbus_object, 'com.ParoaPe.USBGuardGUI')
+        usbguard_gui_dbus_object = self.bus.get_object('com.Bigyls.USBGuardGUI', '/com/Bigyls/USBGuardGUI')
+        usbguard_gui_dbus_interface = dbus.Interface(usbguard_gui_dbus_object, 'com.Bigyls.USBGuardGUI')
         usbguard_gui_dbus_interface.allowUSBGuard()
         self.destroy()
 
     def on_no_button_clicked(self, button):
-        usbguard_gui_dbus_object = self.bus.get_object('com.ParoaPe.USBGuardGUI', '/com/ParoaPe/USBGuardGUI')
-        usbguard_gui_dbus_interface = dbus.Interface(usbguard_gui_dbus_object, 'com.ParoaPe.USBGuardGUI')
+        usbguard_gui_dbus_object = self.bus.get_object('com.Bigyls.USBGuardGUI', '/com/Bigyls/USBGuardGUI')
+        usbguard_gui_dbus_interface = dbus.Interface(usbguard_gui_dbus_object, 'com.Bigyls.USBGuardGUI')
         usbguard_gui_dbus_interface.rejectUSBGuard()
         self.destroy()
 

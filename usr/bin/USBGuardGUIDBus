@@ -8,13 +8,14 @@ import dbus.mainloop.glib
 from gi.repository import GLib
 
 # Defined DBus service name, object path, and interface name
-BUS_NAME = 'com.ParoaPe.USBGuardGUI'
-OBJECT_PATH = '/com/ParoaPe/USBGuardGUI'
-INTERFACE_NAME = 'com.ParoaPe.USBGuardGUI'
+BUS_NAME = 'com.Bigyls.USBGuardGUI'
+OBJECT_PATH = '/com/Bigyls/USBGuardGUI'
+INTERFACE_NAME = 'com.Bigyls.USBGuardGUI'
 
 # DBus service class that inherits from dbus.service.Object
 class USBGuardGUIDBus(dbus.service.Object):
     def __init__(self):
+        self.previous_usb = set()
         self.bus = dbus.SystemBus()
         self.bus.request_name(BUS_NAME)
         bus_name = dbus.service.BusName(BUS_NAME, bus=self.bus)
@@ -41,11 +42,16 @@ class USBGuardGUIDBus(dbus.service.Object):
             usbguard_object = self.bus.get_object('org.usbguard1', '/org/usbguard1/Devices')
             usbguard_interface = dbus.Interface(usbguard_object, 'org.usbguard.Devices1')
             usb_blocked_name = usbguard_interface.listDevices(dbus.String('block'))
-            print(usb_blocked_name)
+            logging.debug(f"USB informations: {usb_blocked_name}")
             usb_name = str(usb_blocked_name).split('"')[::-1][str(usb_blocked_name).split('"')[::-1].index(' name ') - 1]
-            self.usbDetectionSignal(usb_name)
+            usb_info = [usb_name, str(usb_blocked_name).split('"')[::-1][str(usb_blocked_name).split('"')[::-1].index(' parent-hash ') - 1]]
+            if usb_info != self.previous_usb:
+                self.previous_usb = usb_info
+                self.usbDetectionSignal(usb_name)
+            else:
+                logging.info("USB device is the same as the previous detection, skipping action.")
         except Exception as error:
-            logging.debug("Error in usbDecteted method: %s" % error)
+            logging.debug("Error in usbDetected method: %s" % error)
 
     @dbus.service.method(dbus_interface=INTERFACE_NAME)
     def allowUSBGuard(self):
@@ -53,8 +59,12 @@ class USBGuardGUIDBus(dbus.service.Object):
         usbguard_object = self.bus.get_object('org.usbguard1', '/org/usbguard1/Devices')
         usbguard_interface = dbus.Interface(usbguard_object, 'org.usbguard.Devices1')
         usb_blocked_id = usbguard_interface.listDevices(dbus.String('block'))
-        id = re.findall(r'dbus.UInt32\((\d+)\)', str(usb_blocked_id))[::-1][0]
-        usbguard_interface.applyDevicePolicy(dbus.UInt32(id), dbus.UInt32(0), dbus.Boolean(True))
+        if usb_blocked_id and re.findall(r'dbus.UInt32\((\d+)\)', str(usb_blocked_id)):
+            id_list = re.findall(r'dbus.UInt32\((\d+)\)', str(usb_blocked_id))
+            id = id_list[::-1][0]
+            usbguard_interface.applyDevicePolicy(dbus.UInt32(id), dbus.UInt32(0), dbus.Boolean(True))
+        else:
+            pass
 
     @dbus.service.method(dbus_interface=INTERFACE_NAME)
     def rejectUSBGuard(self):

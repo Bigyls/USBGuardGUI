@@ -1,14 +1,13 @@
 Package: usbguardgui
-Version: 1.0.0
-Maintainer: ParoaPe <par0ap3@proton.me>
+Version: 1.0.1
+Maintainer: Bigyls
 Section: utils
 Priority: optional
 Architecture: all
 Depends: usbguard, python3, python3-dbus, python3-gi, zenity
-Homepage: https://github.com/ParoaPe/USBGuardGUI
+Homepage: https://github.com/Bigyls/USBGuardGUI
 Description: Popup for Allow/Deny USB with USBGuard
- As soon as you connect a USB device to your PC,
- the tool will display a popup
- and add an authorization rule to USBGuard
- if you allow the USB
-
+  As soon as you connect a USB device to your PC,
+  the tool will display a popup
+  and add an authorization rule to USBGuard
+  if you allow the USB
