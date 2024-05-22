@@ -17,19 +17,9 @@ Go to the [latest release](https://github.com/Bigyls/USBGuardGUI/releases/latest
 
 Run command (where `DEB_PACKAGE` is the downloaded file):
 
-#### With APT
-
 ```shell
-  sudo apt install <DEB_PACKAGE>
+sudo dpkg -i <DEB_PACKAGE> || (sudo apt-get -f install -y && sudo dpkg -i <DEB_PACKAGE>)
 ```
-
-#### With DPKG
-
-```shell
-  sudo dpkg -i <DEB_PACKAGE>
-```
-
-⚠️ If you already have USBGuard installed everything will be ok **BUT** if it's not installed an error will appear during the `dpkg` command, just type the command `sudo apt -f install -y` after `dpkg` command, so that everything goes into the order. You can also [install USBGuard](/doc/USBGuard.md) step by step before `dpkg` command.
 
 **Don't forget to logout/login after install.**
 
