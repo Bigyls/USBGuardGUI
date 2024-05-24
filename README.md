@@ -18,8 +18,10 @@ Go to the [latest release](https://github.com/Bigyls/USBGuardGUI/releases/latest
 Run command (where `DEB_PACKAGE` is the downloaded file):
 
 ```shell
-sudo dpkg -i <DEB_PACKAGE> || (sudo apt-get -f install -y && sudo dpkg -i <DEB_PACKAGE>)
+sudo apt install  ./<DEB_PACKAGE>
 ```
+
+Do not get attention to `Download is performed unsandboxed`.
 
 **Don't forget to logout/login after install.**
 
